@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Soil Analysis System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="max-w-lg mx-auto p-8 bg-white shadow-md rounded-md">
+        <h1 class="text-2xl font-bold mb-4">Smart Soil Analysis System</h1>
+        <form id="soilForm">
+            <div class="mb-4">
+                <label for="moisture" class="block text-sm font-medium text-gray-700">Soil Moisture Level:</label>
+                <input type="number" id="moisture" name="moisture" class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+            <div class="mb-4">
+                <label for="ph" class="block text-sm font-medium text-gray-700">Soil pH Level:</label>
+                <input type="number" step="0.1" id="ph" name="ph" class="mt-1 block w-full border-2 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+            <button type="submit" class="w-full bg-indigo-500 text-white py-2 px-4 rounded-md hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-indigo-500 focus:ring-opacity-50">Get Recommendations</button>
+        </form>
+        <div id="recommendations" class="mt-6 hidden">
+            <h2 class="text-xl font-bold mb-2">Recommended Plants:</h2>
+            <ul id="plantList" class="list-disc pl-4"></ul>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById('soilForm');
+            const plantList = document.getElementById('plantList');
+            const recommendationsDiv = document.getElementById('recommendations');
+
+            const plants = [
+                { name: 'Tomatoes', idealMoisture: 60, idealPH: 6.5 },
+                { name: 'Carrots', idealMoisture: 50, idealPH: 6.0 },
+                { name: 'Lettuce', idealMoisture: 70, idealPH: 6.2 },
+                { name: 'Strawberries', idealMoisture: 80, idealPH: 6.5 },
+                { name: 'Potatoes', idealMoisture: 65, idealPH: 5.5 },
+                { name: 'Cabbage', idealMoisture: 75, idealPH: 6.0 },
+                { name: 'Spinach', idealMoisture: 55, idealPH: 6.8 },
+                { name: 'Corn', idealMoisture: 85, idealPH: 5.8 },
+                { name: 'Bell Peppers', idealMoisture: 70, idealPH: 6.5 },
+                { name: 'Radishes', idealMoisture: 65, idealPH: 6.2 }
+            ];
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                
+                const moisture = parseFloat(document.getElementById('moisture').value);
+                const ph = parseFloat(document.getElementById('ph').value);
+
+                const matchedPlants = plants.filter(plant =>
+                    plant.idealMoisture === moisture && plant.idealPH === ph
+                );
+
+                if (matchedPlants.length > 0) {
+                    recommendationsDiv.classList.remove('hidden');
+                    plantList.innerHTML = '';
+                    matchedPlants.forEach(plant => {
+                        const li = document.createElement('li');
+                        li.textContent = plant.name;
+                        plantList.appendChild(li);
+                    });
+                } else {
+                    recommendationsDiv.classList.add('hidden');
+                    alert('No recommendations found for the given input.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
